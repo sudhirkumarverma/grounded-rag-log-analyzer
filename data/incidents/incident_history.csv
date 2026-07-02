@@ -1,26 +1,51 @@
 incident_id,title,root_cause,resolution,lessons_learned
-INC-1000,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1001,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
-INC-1002,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
-INC-1003,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1004,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1005,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1006,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1007,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
-INC-1008,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
-INC-1009,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1010,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1011,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1012,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1013,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
-INC-1014,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
-INC-1015,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
-INC-1016,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
-INC-1017,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1018,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1019,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
-INC-1020,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1021,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
-INC-1022,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
-INC-1023,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
-INC-1024,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1001,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1002,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1003,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1004,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1005,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1006,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1007,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1008,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1009,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1010,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1011,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1012,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1013,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1014,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1015,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1016,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1017,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1018,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1019,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1020,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1021,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1022,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1023,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1024,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1025,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1026,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1027,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1028,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1029,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1030,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1031,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1032,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1033,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1034,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1035,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1036,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1037,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1038,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1039,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1040,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1041,Container CrashLoop,Application crashed repeatedly because of an unhandled exception.,Fix application startup exception and redeploy.,Improve startup health checks.
+INC-1042,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1043,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1044,Deployment Failure,PostgreSQL connection pool exhausted during schema migration.,"Increase PostgreSQL connection pool, rerun migration and redeploy.",Monitor connection pool usage before deployment.
+INC-1045,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1046,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1047,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.
+INC-1048,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1049,Redis Failure,Redis exhausted available memory and stopped serving requests.,Restart Redis and increase memory allocation.,Enable Redis memory alerts.
+INC-1050,Image Pull Failure,Container registry authentication failed.,Refresh registry credentials and retry deployment.,Rotate registry credentials before expiration.

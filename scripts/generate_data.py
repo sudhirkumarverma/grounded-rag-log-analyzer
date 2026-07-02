@@ -1,31 +1,35 @@
 """
 Grounded RAG Log Analyzer
-Enterprise Synthetic Data Generator
+Enterprise Synthetic Dataset Generator
 
-Generates:
-- application_logs.csv
-- deployment_logs.csv
-- kubernetes_logs.csv
-- incident_history.csv
-- deployment_runbook.md
-- sample_questions.json
+This script generates:
+
+1. enterprise_logs.csv
+2. incident_history.csv
+3. deployment_runbook.md
+4. sample_questions.json
+
+Author: Sudhir Kumar Verma
 """
 
-from pathlib import Path
+from __future__ import annotations
+
 import csv
 import json
 import random
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
 
-# ------------------------------------------------------
+# ----------------------------------------------------------
 # Configuration
-# ------------------------------------------------------
+# ----------------------------------------------------------
 
 random.seed(42)
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT_DIR = Path(__file__).resolve().parent.parent
 
-DATA_DIR = ROOT / "data"
+DATA_DIR = ROOT_DIR / "data"
 
 LOG_DIR = DATA_DIR / "logs"
 INCIDENT_DIR = DATA_DIR / "incidents"
@@ -35,166 +39,278 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 INCIDENT_DIR.mkdir(parents=True, exist_ok=True)
 RUNBOOK_DIR.mkdir(parents=True, exist_ok=True)
 
-# ------------------------------------------------------
+ENTERPRISE_LOG_FILE = LOG_DIR / "enterprise_logs.csv"
+
+INCIDENT_FILE = INCIDENT_DIR / "incident_history.csv"
+
+RUNBOOK_FILE = RUNBOOK_DIR / "deployment_runbook.md"
+
+QUESTION_FILE = DATA_DIR / "sample_questions.json"
+
+START_TIME = datetime(2026, 6, 18, 10, 0, 0)
+
+# ----------------------------------------------------------
 # Enterprise Environment
-# ------------------------------------------------------
+# ----------------------------------------------------------
 
 SERVICES = [
     "payment-api",
     "order-service",
     "inventory-service",
     "auth-service",
-    "notification-service"
+    "notification-service",
 ]
 
-HOSTS = [
-    "prod-app-01",
-    "prod-app-02",
-    "prod-app-03"
+ENVIRONMENTS = [
+    "production",
+    "staging",
 ]
 
-SEVERITY = [
+SOURCES = [
+    "Jenkins",
+    "Docker",
+    "Kubernetes",
+    "PostgreSQL",
+    "Redis",
+    "Application",
+]
+
+SEVERITIES = [
     "INFO",
     "WARN",
-    "ERROR"
+    "ERROR",
 ]
 
-DEPLOYMENTS = [
-    "v2.0.1",
-    "v2.1.0",
-    "v2.1.3",
-    "v2.2.0"
-]
+# ----------------------------------------------------------
+# Incident Definition
+# ----------------------------------------------------------
 
-# ------------------------------------------------------
+
+@dataclass
+class IncidentTemplate:
+
+    title: str
+
+    root_cause: str
+
+    resolution: str
+
+    lessons: str
+
+    timeline: list[tuple[str, str, str]]
+
+
+# ----------------------------------------------------------
 # Incident Templates
-# ------------------------------------------------------
+# ----------------------------------------------------------
 
-INCIDENTS = [
+INCIDENT_TEMPLATES = [
 
-    {
-        "title": "Database Connection Timeout",
-        "root_cause":
-            "PostgreSQL stopped accepting new client connections.",
-        "resolution":
-            "Increase connection pool and restart database.",
-        "messages": [
-            "Database connection refused",
-            "Connection timeout",
-            "Migration failed due to timeout",
-            "Rollback initiated",
-            "Deployment marked FAILED"
-        ]
-    },
+    IncidentTemplate(
 
-    {
-        "title": "Redis Cache Failure",
-        "root_cause":
-            "Redis became unavailable because of memory pressure.",
-        "resolution":
-            "Restart Redis and warm cache.",
-        "messages": [
-            "Redis unavailable",
-            "Cache miss rate increased",
-            "Switching to database reads",
-            "Latency increased",
-            "Redis recovered"
-        ]
-    },
+        title="Deployment Failure",
 
-    {
-        "title": "Out Of Memory",
-        "root_cause":
-            "Application exceeded Kubernetes memory limit.",
-        "resolution":
-            "Increase memory limit and fix memory leak.",
-        "messages": [
-            "Pod restarted",
-            "OOMKilled",
-            "Container terminated",
-            "Restart policy activated",
-            "Service recovered"
-        ]
-    },
+        root_cause="PostgreSQL connection pool exhausted during schema migration.",
 
-    {
-        "title": "Image Pull Failure",
-        "root_cause":
-            "Docker registry authentication failed.",
-        "resolution":
-            "Refresh registry credentials.",
-        "messages": [
-            "ImagePullBackOff",
-            "Registry authentication failed",
-            "Deployment waiting",
-            "Retrying image pull",
-            "Deployment failed"
-        ]
-    }
+        resolution="Increase PostgreSQL connection pool, rerun migration and redeploy.",
+
+        lessons="Monitor connection pool usage before deployment.",
+
+        timeline=[
+
+            ("Jenkins", "INFO", "Deployment started"),
+
+            ("Docker", "INFO", "Docker image pulled"),
+
+            ("Kubernetes", "INFO", "Deployment initiated"),
+
+            ("PostgreSQL", "WARN", "Connection pool nearing capacity"),
+
+            ("PostgreSQL", "ERROR", "Database connection refused"),
+
+            ("Application", "ERROR", "Migration timed out"),
+
+            ("Jenkins", "ERROR", "Rollback initiated"),
+
+            ("Jenkins", "ERROR", "Deployment failed"),
+
+        ],
+
+    ),
+
+    IncidentTemplate(
+
+        title="Redis Failure",
+
+        root_cause="Redis exhausted available memory and stopped serving requests.",
+
+        resolution="Restart Redis and increase memory allocation.",
+
+        lessons="Enable Redis memory alerts.",
+
+        timeline=[
+
+            ("Redis", "INFO", "Cache warming completed"),
+
+            ("Redis", "WARN", "Memory usage exceeded 90%"),
+
+            ("Redis", "ERROR", "Redis unavailable"),
+
+            ("Application", "WARN", "Fallback to database"),
+
+            ("Application", "WARN", "API latency increased"),
+
+            ("Redis", "INFO", "Redis restarted"),
+
+            ("Application", "INFO", "Service recovered"),
+
+        ],
+
+    ),
+
+    IncidentTemplate(
+
+        title="Container CrashLoop",
+
+        root_cause="Application crashed repeatedly because of an unhandled exception.",
+
+        resolution="Fix application startup exception and redeploy.",
+
+        lessons="Improve startup health checks.",
+
+        timeline=[
+
+            ("Docker", "INFO", "Container started"),
+
+            ("Application", "ERROR", "Unhandled exception during startup"),
+
+            ("Kubernetes", "ERROR", "CrashLoopBackOff detected"),
+
+            ("Kubernetes", "WARN", "Restarting container"),
+
+            ("Application", "ERROR", "Startup failed"),
+
+            ("Kubernetes", "ERROR", "Pod unhealthy"),
+
+        ],
+
+    ),
+
+    IncidentTemplate(
+
+        title="Image Pull Failure",
+
+        root_cause="Container registry authentication failed.",
+
+        resolution="Refresh registry credentials and retry deployment.",
+
+        lessons="Rotate registry credentials before expiration.",
+
+        timeline=[
+
+            ("Jenkins", "INFO", "Deployment started"),
+
+            ("Docker", "ERROR", "Registry authentication failed"),
+
+            ("Kubernetes", "ERROR", "ImagePullBackOff"),
+
+            ("Kubernetes", "WARN", "Retrying image pull"),
+
+            ("Jenkins", "ERROR", "Deployment failed"),
+
+        ],
+
+    ),
 
 ]
 
-# ------------------------------------------------------
-# Timestamp Generator
-# ------------------------------------------------------
+# ----------------------------------------------------------
+# Utility Functions
+# ----------------------------------------------------------
 
-START_TIME = datetime(2026, 6, 18, 10, 0, 0)
+def write_csv(path: Path, headers: list[str], rows: list[list]) -> None:
+    """Write rows to a CSV file."""
 
-
-def next_timestamp(counter):
-
-    return (
-        START_TIME +
-        timedelta(seconds=counter * random.randint(5, 15))
-    ).strftime("%Y-%m-%d %H:%M:%S")
-
-
-# ------------------------------------------------------
-# CSV Helpers
-# ------------------------------------------------------
-
-def write_csv(path, headers, rows):
-
-    with open(path, "w", newline="") as f:
-
-        writer = csv.writer(f)
-
+    with open(path, "w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.writer(csvfile)
         writer.writerow(headers)
-
         writer.writerows(rows)
 
 
-# ------------------------------------------------------
-# Application Logs
-# ------------------------------------------------------
+def build_timestamp(offset_seconds: int) -> str:
+    """Return timestamp string."""
 
-def generate_application_logs():
+    return (
+        START_TIME + timedelta(seconds=offset_seconds)
+    ).strftime("%Y-%m-%d %H:%M:%S")
+
+
+# ----------------------------------------------------------
+# Enterprise Log Generator
+# ----------------------------------------------------------
+
+def generate_enterprise_logs():
 
     rows = []
 
-    counter = 0
+    incident_history = []
 
-    for _ in range(200):
+    incident_number = 1001
 
-        incident = random.choice(INCIDENTS)
+    time_offset = 0
 
-        rows.append([
-            next_timestamp(counter),
-            random.choice(SERVICES),
-            random.choice(HOSTS),
-            random.choice(SEVERITY),
-            random.choice(incident["messages"]),
-            "production"
+    # Generate 50 realistic incidents
+    for _ in range(50):
+
+        template = random.choice(INCIDENT_TEMPLATES)
+
+        incident_id = f"INC-{incident_number}"
+
+        service = random.choice(SERVICES)
+
+        environment = random.choice(ENVIRONMENTS)
+
+        # Store incident summary
+        incident_history.append([
+            incident_id,
+            template.title,
+            template.root_cause,
+            template.resolution,
+            template.lessons
         ])
 
-        counter += 1
+        # Build timeline
+        for source, severity, message in template.timeline:
 
+            component = source
+
+            rows.append([
+                build_timestamp(time_offset),
+                incident_id,
+                source,
+                service,
+                component,
+                severity,
+                message,
+                environment
+            ])
+
+            time_offset += random.randint(20, 90)
+
+        # Small gap before next incident
+        time_offset += random.randint(180, 600)
+
+        incident_number += 1
+
+    # Save enterprise log file
     write_csv(
-        LOG_DIR / "application_logs.csv",
+        ENTERPRISE_LOG_FILE,
         [
             "timestamp",
+            "incident_id",
+            "source",
             "service",
-            "host",
+            "component",
             "severity",
             "message",
             "environment"
@@ -202,137 +318,9 @@ def generate_application_logs():
         rows
     )
 
-    print("✔ application_logs.csv generated")
-
-# ------------------------------------------------------
-# Deployment Logs
-# ------------------------------------------------------
-
-def generate_deployment_logs():
-
-    rows = []
-
-    for deployment_id in range(1, 81):
-
-        incident = random.choice(INCIDENTS)
-
-        version = random.choice(DEPLOYMENTS)
-
-        status = random.choice([
-            "SUCCESS",
-            "FAILED",
-            "ROLLED_BACK"
-        ])
-
-        duration = random.randint(60, 900)
-
-        rows.append([
-            f"DEP-{deployment_id:04d}",
-            version,
-            status,
-            duration,
-            incident["title"]
-        ])
-
+    # Save incident history
     write_csv(
-        LOG_DIR / "deployment_logs.csv",
-        [
-            "deployment_id",
-            "version",
-            "status",
-            "duration_seconds",
-            "reason"
-        ],
-        rows
-    )
-
-    print("✔ deployment_logs.csv generated")
-
-
-# ------------------------------------------------------
-# Kubernetes Logs
-# ------------------------------------------------------
-
-def generate_kubernetes_logs():
-
-    rows = []
-
-    counter = 0
-
-    events = [
-        "Pod Started",
-        "Container Created",
-        "Container Restarted",
-        "ImagePullBackOff",
-        "CrashLoopBackOff",
-        "OOMKilled",
-        "Liveness Probe Failed",
-        "Readiness Probe Failed"
-    ]
-
-    namespaces = [
-        "production",
-        "payments",
-        "orders"
-    ]
-
-    nodes = [
-        "worker-node-01",
-        "worker-node-02",
-        "worker-node-03"
-    ]
-
-    for i in range(80):
-
-        rows.append([
-            next_timestamp(counter),
-            f"payment-api-{100+i}",
-            random.choice(namespaces),
-            random.choice(nodes),
-            random.choice(events),
-            random.choice(SEVERITY)
-        ])
-
-        counter += 1
-
-    write_csv(
-        LOG_DIR / "kubernetes_logs.csv",
-        [
-            "timestamp",
-            "pod",
-            "namespace",
-            "node",
-            "event",
-            "severity"
-        ],
-        rows
-    )
-
-    print("✔ kubernetes_logs.csv generated")
-
-
-# ------------------------------------------------------
-# Historical Incidents
-# ------------------------------------------------------
-
-def generate_incidents():
-
-    rows = []
-
-    for i in range(25):
-
-        incident = random.choice(INCIDENTS)
-
-        rows.append([
-            f"INC-{1000+i}",
-            incident["title"],
-            incident["root_cause"],
-            incident["resolution"],
-            "Improve monitoring and add preventive alerts."
-        ])
-
-    write_csv(
-        INCIDENT_DIR / "incident_history.csv",
+        INCIDENT_FILE,
         [
             "incident_id",
             "title",
@@ -340,127 +328,107 @@ def generate_incidents():
             "resolution",
             "lessons_learned"
         ],
-        rows
+        incident_history
     )
 
-    print("✔ incident_history.csv generated")
-
-
-# ------------------------------------------------------
-# Runbook
-# ------------------------------------------------------
+    print(f"Generated {len(rows)} enterprise log events")
+    print(f"Generated {len(incident_history)} incidents")
+# ----------------------------------------------------------
+# Runbook Generator
+# ----------------------------------------------------------
 
 def generate_runbook():
 
-    content = """# Deployment Failure Runbook
+    runbook = """# Deployment Failure Runbook
 
 ## Symptoms
 
-- Deployment marked FAILED
-- Database timeout
-- Pod restart loop
+- Deployment failed
+- Database connection refused
+- Migration timeout
 - ImagePullBackOff
+- CrashLoopBackOff
 
-## Investigation Steps
+## Investigation
 
-1. Verify deployment status.
-2. Check Kubernetes events.
-3. Review application logs.
-4. Verify PostgreSQL connectivity.
-5. Check Redis availability.
+1. Check Jenkins deployment logs.
+2. Verify Kubernetes events.
+3. Verify PostgreSQL connectivity.
+4. Check Redis health.
+5. Review application logs.
 
 ## Resolution
 
-- Restart failed services.
-- Increase DB connection pool.
-- Fix failed migration.
+- Increase PostgreSQL connection pool.
+- Restart affected services.
+- Retry schema migration.
 - Redeploy application.
 
 ## Verification
 
 - Deployment completed successfully.
-- Pods are healthy.
-- No ERROR logs observed.
+- All pods are healthy.
+- No ERROR logs present.
+- Application health endpoint returns HTTP 200.
+
 """
 
-    with open(
-        RUNBOOK_DIR / "deployment_runbook.md",
-        "w"
-    ) as f:
+    with open(RUNBOOK_FILE, "w", encoding="utf-8") as f:
+        f.write(runbook)
 
-        f.write(content)
-
-    print("✔ deployment_runbook.md generated")
+    print("Generated deployment_runbook.md")
 
 
-# ------------------------------------------------------
+# ----------------------------------------------------------
 # Sample Questions
-# ------------------------------------------------------
+# ----------------------------------------------------------
 
-def generate_questions():
+def generate_sample_questions():
 
     questions = [
-
         "Why did deployment fail?",
-
-        "Why was the application rolled back?",
-
-        "What caused the database timeout?",
-
-        "Why are Kubernetes pods restarting?",
-
-        "What caused ImagePullBackOff?",
-
-        "Why is Redis unavailable?",
-
-        "What is the root cause of incident INC-1001?",
-
-        "Suggest a resolution for deployment failure.",
-
-        "Show evidence for deployment failure.",
-
-        "Which service experienced the highest failures?"
-
+        "Show the timeline for INC-1001.",
+        "What caused the PostgreSQL connection failure?",
+        "Why did Kubernetes restart the pod?",
+        "Summarize incident INC-1005.",
+        "Which incidents involved Redis?",
+        "How was the deployment failure resolved?",
+        "Which services experienced the highest failures?",
+        "Recommend a resolution for deployment failures.",
+        "Show evidence supporting the root cause."
     ]
 
-    with open(
-        DATA_DIR / "sample_questions.json",
-        "w"
-    ) as f:
+    with open(QUESTION_FILE, "w", encoding="utf-8") as f:
+        json.dump(questions, f, indent=4)
 
-        json.dump(
-            questions,
-            f,
-            indent=4
-        )
-
-    print("✔ sample_questions.json generated")
+    print("Generated sample_questions.json")
 
 
-# ------------------------------------------------------
+# ----------------------------------------------------------
 # Main
-# ------------------------------------------------------
+# ----------------------------------------------------------
 
 def main():
 
     print("=" * 60)
-    print("Generating Enterprise Synthetic Dataset")
+    print("Grounded RAG Log Analyzer")
+    print("Enterprise Dataset Generator")
     print("=" * 60)
 
-    generate_application_logs()
-
-    generate_deployment_logs()
-
-    generate_kubernetes_logs()
-
-    generate_incidents()
+    generate_enterprise_logs()
 
     generate_runbook()
 
-    generate_questions()
+    generate_sample_questions()
 
-    print("\nDataset generation completed successfully.")
-    print(f"\nData location: {DATA_DIR}")
+    print("\nDataset generation completed successfully.\n")
+
+    print(f"Enterprise Logs : {ENTERPRISE_LOG_FILE}")
+    print(f"Incidents      : {INCIDENT_FILE}")
+    print(f"Runbook         : {RUNBOOK_FILE}")
+    print(f"Questions       : {QUESTION_FILE}")
+
+    print("\nReady for ingestion.")
 
 
 if __name__ == "__main__":

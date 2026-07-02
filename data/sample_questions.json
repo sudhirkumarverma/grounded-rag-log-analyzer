@@ -1,12 +1,12 @@
 [
     "Why did deployment fail?",
-    "Why was the application rolled back?",
-    "What caused the database timeout?",
-    "Why are Kubernetes pods restarting?",
-    "What caused ImagePullBackOff?",
-    "Why is Redis unavailable?",
-    "What is the root cause of incident INC-1001?",
-    "Suggest a resolution for deployment failure.",
-    "Show evidence for deployment failure.",
-    "Which service experienced the highest failures?"
+    "Show the timeline for INC-1001.",
+    "What caused the PostgreSQL connection failure?",
+    "Why did Kubernetes restart the pod?",
+    "Summarize incident INC-1005.",
+    "Which incidents involved Redis?",
+    "How was the deployment failure resolved?",
+    "Which services experienced the highest failures?",
+    "Recommend a resolution for deployment failures.",
+    "Show evidence supporting the root cause."
 ]

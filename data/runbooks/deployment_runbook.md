@@ -2,28 +2,31 @@
 
 ## Symptoms
 
-- Deployment marked FAILED
-- Database timeout
-- Pod restart loop
+- Deployment failed
+- Database connection refused
+- Migration timeout
 - ImagePullBackOff
+- CrashLoopBackOff
 
-## Investigation Steps
+## Investigation
 
-1. Verify deployment status.
-2. Check Kubernetes events.
-3. Review application logs.
-4. Verify PostgreSQL connectivity.
-5. Check Redis availability.
+1. Check Jenkins deployment logs.
+2. Verify Kubernetes events.
+3. Verify PostgreSQL connectivity.
+4. Check Redis health.
+5. Review application logs.
 
 ## Resolution
 
-- Restart failed services.
-- Increase DB connection pool.
-- Fix failed migration.
+- Increase PostgreSQL connection pool.
+- Restart affected services.
+- Retry schema migration.
 - Redeploy application.
 
 ## Verification
 
 - Deployment completed successfully.
-- Pods are healthy.
-- No ERROR logs observed.
+- All pods are healthy.
+- No ERROR logs present.
+- Application health endpoint returns HTTP 200.
+
