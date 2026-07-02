@@ -1,0 +1,12 @@
+[
+    "Why did deployment fail?",
+    "Why was the application rolled back?",
+    "What caused the database timeout?",
+    "Why are Kubernetes pods restarting?",
+    "What caused ImagePullBackOff?",
+    "Why is Redis unavailable?",
+    "What is the root cause of incident INC-1001?",
+    "Suggest a resolution for deployment failure.",
+    "Show evidence for deployment failure.",
+    "Which service experienced the highest failures?"
+]

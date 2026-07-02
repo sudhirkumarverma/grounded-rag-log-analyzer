@@ -1,0 +1,26 @@
+incident_id,title,root_cause,resolution,lessons_learned
+INC-1000,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1001,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
+INC-1002,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
+INC-1003,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1004,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1005,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1006,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1007,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
+INC-1008,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
+INC-1009,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1010,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1011,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1012,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1013,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
+INC-1014,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
+INC-1015,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
+INC-1016,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
+INC-1017,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1018,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1019,Database Connection Timeout,PostgreSQL stopped accepting new client connections.,Increase connection pool and restart database.,Improve monitoring and add preventive alerts.
+INC-1020,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1021,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
+INC-1022,Image Pull Failure,Docker registry authentication failed.,Refresh registry credentials.,Improve monitoring and add preventive alerts.
+INC-1023,Redis Cache Failure,Redis became unavailable because of memory pressure.,Restart Redis and warm cache.,Improve monitoring and add preventive alerts.
+INC-1024,Out Of Memory,Application exceeded Kubernetes memory limit.,Increase memory limit and fix memory leak.,Improve monitoring and add preventive alerts.
