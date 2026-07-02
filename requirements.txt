@@ -1,0 +1,34 @@
+# Web UI
+streamlit==1.49.1
+
+# Vector Database
+chromadb==1.0.20
+
+# Embeddings
+sentence-transformers==5.1.0
+torch>=2.7.0
+torchvision>=0.22.0
+
+# LLM Framework
+langchain==0.3.27
+langchain-community==0.3.29
+langchain-openai==0.3.32
+
+# OpenAI Client
+openai>=1.101.0
+
+# Data Processing
+pandas==2.3.2
+numpy==2.3.2
+
+# Environment Variables
+python-dotenv==1.1.1
+
+# Progress Bars
+tqdm==4.67.1
+
+# Tokenizer
+tiktoken>=0.11.0
+
+# Utilities
+requests>=2.32.5
