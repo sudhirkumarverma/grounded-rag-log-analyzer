@@ -46,12 +46,15 @@ class Retriever:
             metadatas,
             distances,
         ):
-
+            similarity = max(
+                0.0,
+                1.0 - (float(distance) / 2.0)
+            )
             item = {
                 "document": document,
                 "metadata": metadata,
                 "distance": float(distance),
-                "confidence": round(max(0.0, 1.0 - float(distance)), 3),
+                "similarity": round(similarity, 3),
             }
 
             source = metadata.get("source_type")

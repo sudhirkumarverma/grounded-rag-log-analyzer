@@ -14,8 +14,7 @@ for i, result in enumerate(results, start=1):
 
     print("-" * 80)
 
-    print("Confidence :", result["confidence"])
-
+    print("Similarity :", result["similarity"])
     print("Distance   :", result["distance"])
 
     print("Metadata")
