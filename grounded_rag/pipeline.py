@@ -20,14 +20,33 @@ class GroundedRAGPipeline:
 
     def ask(self, question: str):
 
-        # Step 1 - Retrieve evidence
-        results = self.retriever.search(question)
+        # --------------------------------------------------
+        # Step 1 - Validate the user's question
+        # --------------------------------------------------
 
-        # Step 2 - Validate evidence
-        allowed, message = GuardRails.validate(results)
+        allowed, message = GuardRails.validate_question(question)
 
         if not allowed:
+            return {
+                "allowed": False,
+                "message": message,
+                "answer": None,
+                "results": [],
+            }
 
+        # --------------------------------------------------
+        # Step 2 - Retrieve relevant evidence
+        # --------------------------------------------------
+
+        results = self.retriever.search(question)
+
+        # --------------------------------------------------
+        # Step 3 - Validate retrieved evidence
+        # --------------------------------------------------
+
+        allowed, message = GuardRails.validate_retrieval(results)
+
+        if not allowed:
             return {
                 "allowed": False,
                 "message": message,
@@ -35,14 +54,24 @@ class GroundedRAGPipeline:
                 "results": results,
             }
 
-        # Step 3 - Build context
+        # --------------------------------------------------
+        # Step 4 - Build grounded context
+        # --------------------------------------------------
+
         context = self.context_builder.build(
             question,
             results,
         )
 
-        # Step 4 - Generate answer
+        # --------------------------------------------------
+        # Step 5 - Generate grounded response
+        # --------------------------------------------------
+
         answer = self.llm.generate(context)
+
+        # --------------------------------------------------
+        # Step 6 - Return final response
+        # --------------------------------------------------
 
         return {
             "allowed": True,

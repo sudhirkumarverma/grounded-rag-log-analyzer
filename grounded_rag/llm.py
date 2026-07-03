@@ -1,54 +1,82 @@
 """
 OpenAI Integration
+Grounded RAG Log Analyzer
 """
 
 import os
-from openai import OpenAI
 
 from dotenv import load_dotenv
+from openai import OpenAI
+
+from grounded_rag.config import (
+    LLM_MODEL,
+    TEMPERATURE,
+)
+from grounded_rag.prompts import SYSTEM_PROMPT
 
 load_dotenv()
 
-from grounded_rag.prompts import SYSTEM_PROMPT
-
 
 class LLM:
+    """
+    Wrapper around the OpenAI Chat Completions API.
+    """
 
     def __init__(self):
 
+        api_key = os.getenv("OPENAI_API_KEY")
+
+        if not api_key:
+            raise ValueError(
+                "OPENAI_API_KEY not found. "
+                "Please configure it in your .env file."
+            )
+
         self.client = OpenAI(
-            api_key=os.getenv("OPENAI_API_KEY")
+            api_key=api_key,
         )
 
-    def generate(self, context):
+    # --------------------------------------------------
+    # Build User Prompt
+    # --------------------------------------------------
 
-        user_prompt = f"""
+    def _build_prompt(self, context):
+
+        return f"""
 QUESTION
 
 {context['question']}
 
-======================================
+==================================================
 
-TIMELINE
+DEPLOYMENT TIMELINE
 
 {context['timeline']}
 
-======================================
+==================================================
 
 HISTORICAL INCIDENTS
 
 {context['incidents']}
 
-======================================
+==================================================
 
-RUNBOOKS
+RUNBOOK
 
 {context['runbooks']}
 """
 
+    # --------------------------------------------------
+    # Generate Response
+    # --------------------------------------------------
+
+    def generate(self, context):
+
+        prompt = self._build_prompt(context)
+
         response = self.client.chat.completions.create(
-            model="gpt-4.1",
-            temperature=0,
+            model=LLM_MODEL,
+            temperature=TEMPERATURE,
             messages=[
                 {
                     "role": "system",
@@ -56,9 +84,9 @@ RUNBOOKS
                 },
                 {
                     "role": "user",
-                    "content": user_prompt,
+                    "content": prompt,
                 },
             ],
         )
 
-        return response.choices[0].message.content
+        return response.choices[0].message.content.strip()
